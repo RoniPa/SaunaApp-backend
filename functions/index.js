@@ -25,7 +25,10 @@ admin.initializeApp(functions.config().firebase);
  * Messages are created to `/messages/{uid}/inbox`.
  * Users save their device notification tokens to `/users/{uid}/notificationTokens/{notificationToken}`.
  */
-exports.sendMessageNotification = functions.database.ref('/messages/{uid}/inbox/{messageId}').onWrite(event => {
+exports.sendMessageNotification = functions.database.ref('/messages/{uid}/{conversationId}/{messageId}').onWrite(event => {
+  // Delete when you wish to enable!
+  return;
+
   const uid = event.params.uid;
   const message = event.data.val();
   
@@ -59,7 +62,7 @@ exports.sendMessageNotification = functions.database.ref('/messages/{uid}/inbox/
       notification: {
         title: 'You have a new message',
         body: `${sender.displayName} sent you a message.`,
-        icon: sender.photoURL
+	sound: 'default'
       }
     };
 
